@@ -20,6 +20,10 @@ public class BaiduOcrApi {
 	
 	private static BaiduOcrApi instance = new BaiduOcrApi();
 	
+	public static BaiduOcrApi getInstance() {
+		return instance;
+	}
+	
 	private BaiduOcrApi() {
 		if (instance == null) {
 			client.setConnectionTimeoutInMillis(2000);

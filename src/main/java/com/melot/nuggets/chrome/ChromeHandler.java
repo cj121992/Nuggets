@@ -1,5 +1,6 @@
 package com.melot.nuggets.chrome;
 
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,9 +12,10 @@ public class ChromeHandler {
 
 	private static WebElement kw;
 	private static WebElement su;
-	private static WebElement query;
-	private static WebElement stb;
-
+	private static WebElement upquery;
+	private static WebElement searchBtn;
+	private static WebElement cancel;
+	
 	public static ChromeHandler getInstance() {
 		return instance;
 	}
@@ -27,23 +29,25 @@ public class ChromeHandler {
 		WebDriver baiduWebDriver = openBaidu();
 
 		WebDriver sougouWebDriver = openSogou();
-
-		close(baiduWebDriver, sougouWebDriver);
+		findSogou("玉不琢不成器");
+		findSogou("cj");
+		close(baiduWebDriver);
+		close(sougouWebDriver);
 	}
 
-	public static void close(WebDriver baiduWebDriver, WebDriver sougouWebDriver) throws InterruptedException {
+	public static void close(WebDriver driver) throws InterruptedException {
 		Thread.sleep(3000);
-		baiduWebDriver.close();
-		sougouWebDriver.close();
+		driver.close();
 		System.out.println("Hello World!");
 	}
 	
 	public static WebDriver openSogou() {
 		WebDriver sougouWebDriver = new ChromeDriver();
-		sougouWebDriver.get("http://www.sogou.com");
+		sougouWebDriver.get("https://www.sogou.com/web?query=hello");
 
-		query = sougouWebDriver.findElement(By.id("query"));
-		stb = sougouWebDriver.findElement(By.id("stb"));
+		upquery = sougouWebDriver.findElement(By.id("upquery"));
+		searchBtn = sougouWebDriver.findElement(By.id("searchBtn"));
+		cancel = sougouWebDriver.findElement(By.id("top_qreset"));
 		return sougouWebDriver;
 	}
 
@@ -57,9 +61,13 @@ public class ChromeHandler {
 	}
 	
 	public static void findSogou(String keyWords) {
-		query.clear();
-		query.sendKeys(keyWords);
-		stb.click();
+		cancel.click();
+		upquery.sendKeys(keyWords);
+		searchBtn.click();
+	}
+	
+	public static void findSogou(WebDriver driver, String keyWords) {
+		driver.get("https://www.sogou.com/web?query=" + keyWords);
 	}
 
 	public static void findBaidu(String keyWords) {
