@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>websocket</title>
+  <script>
+    function connect() {
+      var cache = {};
+      // var wsServer = 'ws://10.0.17.131:81/';
+      var wsServer = document.getElementsByName('url')[0].value;
+      var ws = new WebSocket(wsServer);
+      ws.onopen = function() {
+        console.log('connected');
+        var root = document.getElementById('root');
+        root.removeChild(document.getElementById('input'));
+        root.removeChild(document.getElementById('button'));
+        var connectElement = document.createElement("span");
+        var text = document.createTextNode("connecting...");
+        connectElement.appendChild(text);
+        root.appendChild(connectElement);
+        ws.send('{"MsgTag":10030101,"userId":-1,"token":"92D4C39FCD8A4D9C86C1A98D16B2BA3A","platform":1}');
+      };
+      ws.onclose = function(evt) {
+        console.log('disconnected');
+      };
+      ws.onmessage = function(msg) {
+		//把拦截到的问题答案msg发送到本地服务进行处理
+        var msgObj = JSON.parse(msg.data);
+		if (msgObj.MsgTag === 10030203) {
+		   console.log(msgObj);
+           document.getElementById('leftIframe').src = `http://www.baidu.com/s?wd=${msgObj.topicContent}&cl=3`;
+		   document.getElementById('rightIframe').src = `https://www.sogou.com/web?query=${msgObj.topicContent}&ie=utf8`;
+        }
+	  }; 
+	  ws.onerror = function (evt) {
+        console.error(evt);
+      }; 
+	}
+  </script>
+</head>
+<body>
+
+
+  <div id='root'>
+    <DIV id="left" align=“center” style="width:710px;height:700px;position:absolute;overflow:auto;">
+      <IFRAME id="leftIframe" src="http://www.baidu.com" frameBorder=0 marginwidth=0 marginheight=0  style="width:1000px;height:2000px;" scrolling=no ALLOWTRANSPARENCY="true">
+      </IFRAME>
+    </DIV>
+    <DIV id="right" align=“center” style="width:710px;height:700px;margin-left:700px;overflow:auto;">
+      <IFRAME id="rightIframe" src="https://www.sogou.com" frameBorder=0 marginwidth=0 marginheight=0  style="width:1000px;height:2500px;" scrolling=no ALLOWTRANSPARENCY="true">
+	  </IFRAME>
+    </DIV>
+  </div>
+</body>
+</html>

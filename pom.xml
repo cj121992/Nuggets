@@ -56,6 +56,13 @@
 		<springboot.version>1.5.3.RELEASE</springboot.version>
 		<melot.common.dependencies.version>1.0.4</melot.common.dependencies.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<slf4j-api.version>1.6.4</slf4j-api.version>
+		<logback-classic.version>0.9.28</logback-classic.version>
+		<nekohtml.version>1.9.19</nekohtml.version>
+		<httpclient.version>3.1</httpclient.version>
+		<json.version>chargebee-1.0</json.version>
+		<jsoup.version>1.7.2</jsoup.version>
+		<commons-lang3>3.1</commons-lang3>
 	</properties>
 
 	<dependencies>
@@ -86,6 +93,75 @@
 			<artifactId>java-sdk</artifactId>
 			<version>4.1.0</version>
 		</dependency>
+		<!-- <dependency> <groupId>org.java-websocket</groupId> <artifactId>Java-WebSocket</artifactId> 
+			<version>1.3.0</version> </dependency> -->
+		<dependency>
+			<groupId>org.glassfish.tyrus.bundles</groupId>
+			<artifactId>tyrus-standalone-client</artifactId>
+			<version>1.13</version>
+		</dependency>
+		<!-- <dependency> <groupId>javax.websocket</groupId> <artifactId>javax.websocket-api</artifactId> 
+			<version>1.1</version> <scope>provided</scope> </dependency> -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.46</version>
+		</dependency>
+
+		<!-- 使用NEKOHTML和XPATH来解析百度搜索页面 -->
+		<dependency>
+			<groupId>net.sourceforge.nekohtml</groupId>
+			<artifactId>nekohtml</artifactId>
+			<version>${nekohtml.version}</version>
+		</dependency>
+		<!-- 日志框架API -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j-api.version}</version>
+		</dependency>
+		<!-- 日志实现提供者 -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback-classic.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- 以下两项为谷歌搜索依赖 -->
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>${httpclient.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>org.json</artifactId>
+			<version>${json.version}</version>
+		</dependency>
+		<!-- 使用JSoup和CSSPath来解析百度搜索页面 -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>${jsoup.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

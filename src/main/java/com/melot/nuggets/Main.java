@@ -22,7 +22,6 @@ public class Main {
 			Screenshot.captureScreen(path, fileName);
 			String keywords = BaiduOcrApi.getInstance().callOrc(path + fileName);
 			try {
-				ChromeHandler.findSogou(sogou, String.valueOf(i));
 				ChromeHandler.findBaidu(keywords);
 			} catch (Exception e) {
 				logger.error("keywords error : " + keywords, e);
