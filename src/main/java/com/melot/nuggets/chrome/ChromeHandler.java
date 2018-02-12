@@ -21,6 +21,10 @@ public class ChromeHandler {
 	private static WebElement rightFrame;
 
 	private static WebDriver baiduWebDriver;
+	private static WebDriver baiduWebDriver2;
+	private static WebDriver baiduWebDriver3;
+
+
 	private static WebDriver sougouWebDriver;
 
 	public static ChromeHandler getInstance() {
@@ -53,9 +57,14 @@ public class ChromeHandler {
 
 		WebDriver baiduWebDriver = openBaidu();
 
+		
+		
 		WebDriver sougouWebDriver = openSogou();
-		findSogou("玉不琢不成器");
-		findSogou("cj");
+		findBaidu("玉不琢不成器");
+		findBaidu2("cj");
+		findBaidu3("cj");
+		findBaidu3("cjg");
+
 		close(baiduWebDriver);
 		close(sougouWebDriver);
 	}
@@ -70,6 +79,8 @@ public class ChromeHandler {
 		Thread.sleep(3000);
 		sougouWebDriver.close();
 		baiduWebDriver.close();
+		baiduWebDriver2.close();
+		baiduWebDriver2.close();
 		System.out.println("close success!");
 	}
 
@@ -86,7 +97,13 @@ public class ChromeHandler {
 	public static WebDriver openBaidu() {
 		baiduWebDriver = new ChromeDriver();
 		baiduWebDriver.get("http://www.baidu.com");
-
+		
+		baiduWebDriver2 = new ChromeDriver();
+		baiduWebDriver2.get("http://www.baidu.com");
+		
+		baiduWebDriver3 = new ChromeDriver();
+		baiduWebDriver3.get("http://www.baidu.com");
+		
 		kw = baiduWebDriver.findElement(By.id("kw"));
 		su = baiduWebDriver.findElement(By.id("su"));
 		return baiduWebDriver;
@@ -111,5 +128,12 @@ public class ChromeHandler {
 	public static void findBaidu(String keyWords) {
 		baiduWebDriver.get("http://www.baidu.com/s?wd=" + keyWords);
 	}
+	
+	public static void findBaidu2(String keyWords) {
+		baiduWebDriver2.get("http://www.baidu.com/s?wd=" + keyWords);
+	}
 
+	public static void findBaidu3(String keyWords) {
+		baiduWebDriver3.get("http://www.baidu.com/s?wd=" + keyWords);
+	}
 }

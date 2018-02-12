@@ -1,6 +1,7 @@
 package com.melot.nuggets.websocket;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.OnClose;
@@ -8,6 +9,8 @@ import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
+
+import org.apache.log4j.Logger;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -19,6 +22,8 @@ import com.melot.nuggets.spider.similarity.PmiSimilarity;
 
 @ClientEndpoint
 public class WSClient {
+	
+    private static final Logger log = Logger.getLogger(WSClient.class);
 	
 	@OnOpen
 	public void onOpen(Session session) {
@@ -37,37 +42,19 @@ public class WSClient {
 		JSONObject json = JSON.parseObject(message);
 		String msgTag = json.getString("MsgTag");
 		if (msgTag.equals("10030203")) {
-			System.out.println(message);
+			log.info(message);
 			String question = json.getString("topicContent");
-			ChromeHandler.findSogou(question);
-			ChromeHandler.findBaidu(question);
 			JSONArray options = json.getJSONArray("options");
 			String a = options.getJSONObject(0).getString("optionContent");
 			String b = options.getJSONObject(1).getString("optionContent");
 			String c = options.getJSONObject(2).getString("optionContent");
-			System.out.println("題目 : " + question + "\n" + "选项a  : "  + a + "\n" + "选项 b : "  + b + "\n" + "选项 c: "  + c + "\n");
+			log.info("題目 : " + question + "\n" + "选项a  : "  + a + "\n" + "选项 b : "  + b + "\n" + "选项 c: "  + c + "\n");
 			similarity(question, a, b, c);
+			ChromeHandler.findBaidu(a);
+			ChromeHandler.findBaidu2(b);
+			ChromeHandler.findBaidu3(c);
+			ChromeHandler.findSogou(question);
 		}
-	}
-
-	private void similarity(String question, String a, String b, String c) {
-		System.out.println("Pmi关联度答案:--------------------------是选大值,非选小值");
-		System.out.println("題目 : " + question);
-		PmiSimilarity asp = new PmiSimilarity(question, a);
-		System.out.println(a + ":" + asp.call());
-		PmiSimilarity bsp = new PmiSimilarity(question, b);
-		System.out.println(b + ":" + bsp.call());
-		PmiSimilarity csp = new PmiSimilarity(question, c);
-		System.out.println(c + ":" + csp.call());
-		System.out.println("-----------------------------------------");
-		System.out.println("NIP关联度答案:--------------------------是选大值,非选小");
-		System.out.println("題目 : " + question);
-		BaiDuSimilarity asn = new BaiDuSimilarity(question, a);
-		System.out.println(a + ":" + asn.call());
-		BaiDuSimilarity bsn = new BaiDuSimilarity(question, b);
-		System.out.println(b + ":" + bsn.call());
-		BaiDuSimilarity csn = new BaiDuSimilarity(question, c);
-		System.out.println(c + ":" + csn.call());
 	}
 	
 //TODO test
@@ -76,6 +63,53 @@ public class WSClient {
 //		WSClient wsClient = new WSClient();
 //		wsClient.onMessage(msgA);
 //	}
+	
+	private static void similarity(String question, String a, String b, String c) {
+		log.info("Pmi关联度答案:--------------------------是选大值,非选小值");
+		log.info("題目 : " + question);
+		PmiSimilarity asp = new PmiSimilarity(question, a);
+		double ad = asp.call();
+		log.info(a + ":" + double2String(ad));
+		PmiSimilarity bsp = new PmiSimilarity(question, b);
+		double bd = bsp.call();
+		log.info(b + ":" + double2String(bd));
+		PmiSimilarity csp = new PmiSimilarity(question, c);
+		double cd = csp.call();
+		log.info(c + ":" + double2String(cd));
+		log.info("Pmi推荐答案: " + getMax(ad, bd, cd));
+		
+		log.info("-----------------------------------------");
+		log.info("NIP关联度答案:--------------------------是选大值,非选小");
+		log.info("題目 : " + question);
+		BaiDuSimilarity asn = new BaiDuSimilarity(question, a);
+		log.info(a + ":" + double2String(asn.call()));
+		BaiDuSimilarity bsn = new BaiDuSimilarity(question, b);
+		log.info(b + ":" + double2String(bsn.call()));
+		BaiDuSimilarity csn = new BaiDuSimilarity(question, c);
+		log.info(c + ":" + double2String(csn.call()));
+	}
+	
+	private static int getMax(double a, double b, double c) {
+		if (a > b) {
+			if (a > c) {
+				return 1;
+			} else {
+				return 3;
+			}
+		} else {
+			if (b > c) {
+				return 2;
+			} else {
+				return 3;
+			}
+		}
+	}
+	
+	private static String double2String(double aspd) {
+		BigDecimal bigDecimal = new BigDecimal(aspd);  
+        String aspdr = bigDecimal.toString();
+		return aspdr;
+	}
 	
 	@OnError
 	public void onError(Throwable t) {

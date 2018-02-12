@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
+import org.apache.log4j.Logger;
+
 /**
  * Created by lingfengsan on 2018/1/23.
  *
@@ -17,7 +19,9 @@ public class PmiSimilarity implements Similarity {
         this.question=question;
         this.answer=answer;
     }
-
+ 
+    private static final Logger log = Logger.getLogger(PmiSimilarity.class);
+    
     @Override
     @SuppressWarnings("unchecked")
     public Double call() {
@@ -39,7 +43,7 @@ public class PmiSimilarity implements Similarity {
         try {
             Long countQA=(Long)futureTasks[0].get();
             Long countA=(Long)futureTasks[1].get();
-//            System.out.println(answer+(double)countQA/(double)countA);
+//            log.info(answer+(double)countQA/(double)countA);
             return (double)countQA/(double)countA;
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -111,23 +115,23 @@ public class PmiSimilarity implements Similarity {
 	}
 
 	private static void similarity(String question, String a, String b, String c) {
-		System.out.println("Pmi关联度答案:--------------------------是选大值,非选小值");
-		System.out.println("題目 : " + question);
+		log.info("Pmi关联度答案:--------------------------是选大值,非选小值");
+		log.info("題目 : " + question);
 		PmiSimilarity asp = new PmiSimilarity(question, a);
-		System.out.println(a + ":" + double2String(asp.call()));
+		log.info(a + ":" + double2String(asp.call()));
 		PmiSimilarity bsp = new PmiSimilarity(question, b);
-		System.out.println(b + ":" + double2String(bsp.call()));
+		log.info(b + ":" + double2String(bsp.call()));
 		PmiSimilarity csp = new PmiSimilarity(question, c);
-		System.out.println(c + ":" + double2String(csp.call()));
-		System.out.println("-----------------------------------------");
-		System.out.println("NIP关联度答案:--------------------------是选大值,非选小");
-		System.out.println("題目 : " + question);
+		log.info(c + ":" + double2String(csp.call()));
+		log.info("-----------------------------------------");
+		log.info("NIP关联度答案:--------------------------是选大值,非选小");
+		log.info("題目 : " + question);
 		BaiDuSimilarity asn = new BaiDuSimilarity(question, a);
-		System.out.println(a + ":" + double2String(asn.call()));
+		log.info(a + ":" + double2String(asn.call()));
 		BaiDuSimilarity bsn = new BaiDuSimilarity(question, b);
-		System.out.println(b + ":" + double2String(bsn.call()));
+		log.info(b + ":" + double2String(bsn.call()));
 		BaiDuSimilarity csn = new BaiDuSimilarity(question, c);
-		System.out.println(c + ":" + double2String(csn.call()));
+		log.info(c + ":" + double2String(csn.call()));
 	}
 
 	private static String double2String(double aspd) {
