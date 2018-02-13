@@ -61,10 +61,10 @@ public class PmiSimilarity implements Similarity {
 		String c = "黄月英";
 		similarity(question, a, b, c);
     	
-		question = "下列不是俄国作家的是";
-		a = "泰戈尔 ";
-		b = "普希金";
-		c = "高尔基";
+		question = "一日不见，如隔三秋”里的“三秋”是指";
+		a = "三个月 ";
+		b = "三年";
+		c = "三个季度";
 		similarity(question, a, b, c);
 		
 		

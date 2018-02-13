@@ -1,5 +1,6 @@
 package com.melot.nuggets.websocket;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 
@@ -16,6 +17,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.melot.nuggets.chrome.ChromeHandler;
+import com.melot.nuggets.fileloader.FileLoad;
 import com.melot.nuggets.spider.similarity.BaiDuSimilarity;
 import com.melot.nuggets.spider.similarity.PmiSimilarity;
 
@@ -49,11 +51,16 @@ public class WSClient {
 			String b = options.getJSONObject(1).getString("optionContent");
 			String c = options.getJSONObject(2).getString("optionContent");
 			log.info("題目 : " + question + "\n" + "选项a  : "  + a + "\n" + "选项 b : "  + b + "\n" + "选项 c: "  + c + "\n");
+			ChromeHandler.findSogou(question);
+			try {
+				FileLoad.search(new File("F:\\Users\\admin\\workspace\\nuggets\\question.txt"), question, 5);
+			} catch (IOException e) {
+			}
 			similarity(question, a, b, c);
 			ChromeHandler.findBaidu(a);
 			ChromeHandler.findBaidu2(b);
 			ChromeHandler.findBaidu3(c);
-			ChromeHandler.findSogou(question);
+			
 		}
 	}
 	
